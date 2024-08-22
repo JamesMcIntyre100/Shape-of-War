@@ -14,8 +14,20 @@ class Unit:
     def draw(self, surface):
         # Set the color based on whether the unit is selected or not
         color = GREEN if self.selected else RED
-        # Draw the circle outline with a specified border thickness
-        pygame.draw.circle(surface, color, (self.x, self.y), self.radius, 3)  # Thickness of 3 pixels
+        
+        # Super-sampling factor
+        ss_factor = 4
+        # Create a high-resolution surface
+        high_res_surface = pygame.Surface((self.radius * 2 * ss_factor, self.radius * 2 * ss_factor), pygame.SRCALPHA)
+        
+        # Draw the high-resolution circle
+        pygame.draw.circle(high_res_surface, color, (self.radius * ss_factor, self.radius * ss_factor), self.radius * ss_factor, 3 * ss_factor) # Thickness of 3 pixels
+        
+        # Scale down the high-resolution surface to fit the original size
+        low_res_surface = pygame.transform.smoothscale(high_res_surface, (self.radius * 2, self.radius * 2))
+        
+        # Blit the low-resolution surface onto the main surface at the correct position
+        surface.blit(low_res_surface, (self.x - self.radius, self.y - self.radius))
 
     def move(self, buildings, units):
         if self.target:
