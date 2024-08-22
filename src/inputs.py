@@ -4,18 +4,18 @@ from display import screen
 from colours import BLACK
 
 # Event handling
-def events(units, start_pos, running):
+def events(state):
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            state.running = False
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if event.button == 1:  # Left click
-                selecting = True
-                start_pos = event.pos
-                selection_rect.topleft = start_pos
+                state.selecting = True
+                state.start_pos = event.pos
+                state.selection_rect.topleft = state.start_pos
             elif event.button == 3:  # Right click
                 target = event.pos
-                for unit in units:
+                for unit in state.units:
                     if unit.selected:
                         unit.target = target
                 # Draw the cross at the target position
@@ -26,19 +26,19 @@ def events(units, start_pos, running):
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:  # Left click released
-                selecting = False
+                state.selecting = False
                 # Check for units within the selection rectangle
-                for unit in units:
-                    if selection_rect.collidepoint(unit.x, unit.y):
+                for unit in state.units:
+                    if state.selection_rect.collidepoint(unit.x, unit.y):
                         unit.selected = True
                     else:
                         unit.selected = False
-                selection_rect.width = selection_rect.height = 0  # Reset selection rectangle
+                state.selection_rect.width = state.selection_rect.height = 0  # Reset selection rectangle
 
-        elif event.type == pygame.MOUSEMOTION and selecting:
+        elif event.type == pygame.MOUSEMOTION and state.selecting:
             # Update selection rectangle size
             end_pos = event.pos
-            selection_rect.width = end_pos[0] - start_pos[0]
-            selection_rect.height = end_pos[1] - start_pos[1]
+            state.selection_rect.width = end_pos[0] - state.start_pos[0]
+            state.selection_rect.height = end_pos[1] - state.start_pos[1]
     
-    return selecting, selection_rect, start_pos, running
+    return state

@@ -4,8 +4,8 @@ import sys
 from display import screen
 from inputs import events
 from buildings import TownCenter
-from units import Soldier
 from colours import WHITE, BLACK
+from sitch import state
 
 # Initialize Pygame
 pygame.init()
@@ -17,34 +17,28 @@ WIDTH, HEIGHT = screen.get_width(), screen.get_height()
 
 # Initialize game objects
 town_center = TownCenter(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, 100)
-units = [Soldier(100, 100, 10, 2), Soldier(200, 150, 10, 2), Soldier(300, 200, 10, 2)]
 buildings = [town_center]
-
-# Initialize selection variables
-selecting = False
-selection_rect = pygame.Rect(0, 0, 0, 0)
-start_pos = None
-running = True
 
 # Main game loop
 clock = pygame.time.Clock()
+    
 
-while running:
+while state.running:
     screen.fill(WHITE)
 
-    selecting, selection_rect, start_pos, running = events(units, start_pos, running)
+    state = events(state)
 
     # Move and draw units
-    for unit in units:
-        unit.move(buildings, units)
+    for unit in state.units:
+        unit.move(buildings, state.units)
         unit.draw(screen)
 
     # Draw the town center
     town_center.draw(screen)
 
     # Draw the selection rectangle if selecting
-    if selecting:
-        pygame.draw.rect(screen, BLACK, selection_rect, 2)
+    if state.selecting:
+        pygame.draw.rect(screen, BLACK, state.selection_rect, 2)
 
     # Update the display
     pygame.display.flip()
