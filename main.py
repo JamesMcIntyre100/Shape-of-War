@@ -32,18 +32,22 @@ class Unit:
         self.radius = radius
         self.speed = speed
         self.selected = False
+        self.target = None
 
     def draw(self, surface):
         color = GREEN if self.selected else RED
         pygame.draw.circle(surface, color, (self.x, self.y), self.radius)
 
-    def move_to(self, target):
-        dx, dy = target[0] - self.x, target[1] - self.y
-        dist = (dx ** 2 + dy ** 2) ** 0.5
-        if dist > self.speed:
-            dx, dy = dx / dist * self.speed, dy / dist * self.speed
-        self.x += dx
-        self.y += dy
+    def move(self):
+        if self.target:
+            dx, dy = self.target[0] - self.x, self.target[1] - self.y
+            dist = (dx ** 2 + dy ** 2) ** 0.5
+            if dist > self.speed:
+                dx, dy = dx / dist * self.speed, dy / dist * self.speed
+                self.x += dx
+                self.y += dy
+            else:
+                self.target = None  # Stop moving when the target is reached
 
 # Subclass for specific buildings/units
 class TownCenter(Building):
@@ -53,7 +57,7 @@ class Soldier(Unit):
     pass
 
 # Initialize game objects
-town_center = TownCenter(WIDTH//2 - 50, HEIGHT//2 - 50, 100, 100)
+town_center = TownCenter(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, 100)
 units = [Soldier(100, 100, 10, 2), Soldier(200, 150, 10, 2), Soldier(300, 200, 10, 2)]
 
 # Selection box variables
@@ -79,8 +83,10 @@ while running:
                 target = event.pos
                 for unit in units:
                     if unit.selected:
-                        unit.move_to(target)
-                pygame.draw.line(screen, BLACK, target, (target[0], target[1]-15), 2)
+                        unit.target = target
+                # Draw the cross at the target position
+                pygame.draw.line(screen, BLACK, (target[0] - 10, target[1]), (target[0] + 10, target[1]), 2)
+                pygame.draw.line(screen, BLACK, (target[0], target[1] - 10), (target[0], target[1] + 10), 2)
                 pygame.display.update()
                 pygame.time.wait(200)  # Display cross for a moment
 
@@ -101,10 +107,13 @@ while running:
             selection_rect.width = end_pos[0] - start_pos[0]
             selection_rect.height = end_pos[1] - start_pos[1]
 
-    # Draw the town center and units
-    town_center.draw(screen)
+    # Move and draw units
     for unit in units:
+        unit.move()
         unit.draw(screen)
+
+    # Draw the town center
+    town_center.draw(screen)
 
     # Draw the selection rectangle if selecting
     if selecting:
