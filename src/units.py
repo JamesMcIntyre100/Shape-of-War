@@ -26,19 +26,17 @@ class Unit:
             new_x = self.x + dx
             new_y = self.y + dy
 
-            # Create a rect representing the unit's new position
-            new_rect = pygame.Rect(new_x - self.radius, new_y - self.radius, self.radius * 2, self.radius * 2)
-
             # Check for collisions with buildings
+            new_rect = pygame.Rect(new_x - self.radius, new_y - self.radius, self.radius * 2, self.radius * 2)
             for building in buildings:
                 if new_rect.colliderect(building.rect):
                     return  # Stop movement if collision with building is detected
 
-            # Check for collisions with other units
+            # Check for collisions with other units using circle distance
             for unit in units:
                 if unit != self:  # Avoid self-collision
-                    unit_rect = pygame.Rect(unit.x - unit.radius, unit.y - unit.radius, unit.radius * 2, unit.radius * 2)
-                    if new_rect.colliderect(unit_rect):
+                    distance_to_unit = ((new_x - unit.x) ** 2 + (new_y - unit.y) ** 2) ** 0.5
+                    if distance_to_unit < self.radius + unit.radius:
                         return  # Stop movement if collision with another unit is detected
 
             # Move to the new position if no collisions
