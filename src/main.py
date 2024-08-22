@@ -4,7 +4,7 @@ import sys
 from display import screen
 from buildings import TownCenter
 from units import Soldier
-from colours import GREEN, RED, WHITE, BLACK
+from colours import WHITE, BLACK
 
 # Initialize Pygame
 pygame.init()
