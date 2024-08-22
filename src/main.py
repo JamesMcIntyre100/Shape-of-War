@@ -20,10 +20,14 @@ town_center = TownCenter(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, 100)
 units = [Soldier(100, 100, 10, 2), Soldier(200, 150, 10, 2), Soldier(300, 200, 10, 2)]
 buildings = [town_center]
 
+# Initialize selection variables
+selecting = False
+selection_rect = pygame.Rect(0, 0, 0, 0)
+start_pos = None
+running = True
+
 # Main game loop
 clock = pygame.time.Clock()
-running = True
-start_pos = None  # Initialize start_pos
 
 while running:
     screen.fill(WHITE)

@@ -3,13 +3,8 @@ import pygame
 from display import screen
 from colours import BLACK
 
-# Selection box variables
-selecting = False
-selection_rect = pygame.Rect(0, 0, 0, 0)
-
 # Event handling
 def events(units, start_pos, running):
-    global selecting
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
