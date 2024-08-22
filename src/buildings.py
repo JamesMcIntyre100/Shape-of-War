@@ -8,7 +8,8 @@ class Building:
         self.rect = pygame.Rect(x, y, width, height)
 
     def draw(self, surface):
-        pygame.draw.rect(surface, BLUE, self.rect)
+        # Draw the rectangle outline with a specified border thickness
+        pygame.draw.rect(surface, BLUE, self.rect, 5)  # Thickness of 5 pixels
 
 # Subclass for specific buildings/units
 class TownCenter(Building):

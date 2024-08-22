@@ -12,8 +12,10 @@ class Unit:
         self.target = None
 
     def draw(self, surface):
+        # Set the color based on whether the unit is selected or not
         color = GREEN if self.selected else RED
-        pygame.draw.circle(surface, color, (self.x, self.y), self.radius)
+        # Draw the circle outline with a specified border thickness
+        pygame.draw.circle(surface, color, (self.x, self.y), self.radius, 3)  # Thickness of 3 pixels
 
     def move(self, buildings, units):
         if self.target:
