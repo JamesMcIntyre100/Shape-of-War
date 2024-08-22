@@ -1,60 +1,18 @@
 import pygame
 import sys
 
+from display import screen
+from buildings import TownCenter
+from units import Soldier
+from colours import GREEN, RED, WHITE, BLACK
+
 # Initialize Pygame
 pygame.init()
 
-# Screen dimensions
-WIDTH, HEIGHT = 800, 600
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Shape RTS Game")
 
-# Colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-GREEN = (0, 255, 0)
-
-# Define Building class
-class Building:
-    def __init__(self, x, y, width, height):
-        self.rect = pygame.Rect(x, y, width, height)
-
-    def draw(self, surface):
-        pygame.draw.rect(surface, BLUE, self.rect)
-
-# Define Unit class
-class Unit:
-    def __init__(self, x, y, radius, speed):
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.speed = speed
-        self.selected = False
-        self.target = None
-
-    def draw(self, surface):
-        color = GREEN if self.selected else RED
-        pygame.draw.circle(surface, color, (self.x, self.y), self.radius)
-
-    def move(self):
-        if self.target:
-            dx, dy = self.target[0] - self.x, self.target[1] - self.y
-            dist = (dx ** 2 + dy ** 2) ** 0.5
-            if dist > self.speed:
-                dx, dy = dx / dist * self.speed, dy / dist * self.speed
-                self.x += dx
-                self.y += dy
-            else:
-                self.target = None  # Stop moving when the target is reached
-
-# Subclass for specific buildings/units
-class TownCenter(Building):
-    pass
-
-class Soldier(Unit):
-    pass
+# Get the width and height
+WIDTH, HEIGHT = screen.get_width(), screen.get_height()
 
 # Initialize game objects
 town_center = TownCenter(WIDTH // 2 - 50, HEIGHT // 2 - 50, 100, 100)
