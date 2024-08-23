@@ -30,7 +30,7 @@ while state.running:
 
     # Move and draw units
     for unit in state.units:
-        unit.move(buildings, state.units)
+        unit.move(buildings, state.units, WIDTH, HEIGHT)
         unit.draw(screen)
 
     # Draw the town center
