@@ -15,7 +15,7 @@ class Unit:
         self.target = None
         self.path = None
         self.last_path_calculation = 0
-        self.path_calculation_cooldown = 0.5  # seconds
+        self.path_calculation_cooldown = 1  # seconds
 
     def draw(self, surface):
         # Set the color based on whether the unit is selected or not
