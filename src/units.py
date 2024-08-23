@@ -102,14 +102,6 @@ class Unit:
                 self.path.pop(i + 1)
             else:
                 i += 1
-
-        def interpolate(self, start, end):
-            dx = end[0] - start[0]
-            dy = end[1] - start[1]
-            dist = max(abs(dx), abs(dy))
-            for i in range(dist):
-                yield (start[0] + dx * i / dist, start[1] + dy * i / dist)
-
     def interpolate(self, start, end):
         dx = end[0] - start[0]
         dy = end[1] - start[1]
