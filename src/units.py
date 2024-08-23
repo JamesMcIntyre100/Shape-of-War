@@ -40,13 +40,12 @@ class Unit:
         if self.target:
             if not self.path:
                 if current_time - self.last_path_calculation > self.path_calculation_cooldown:
-                    obstacles = [b.rect for b in buildings] + [(u.x, u.y) for u in units if u != self]
-                    self.path = a_star((int(self.x), int(self.y)), self.target, obstacles, self.radius)
+                    other_units = [(u.x, u.y) for u in units if u != self]
+                    self.path = a_star((int(self.x), int(self.y)), self.target, buildings, other_units, self.radius)
                     self.last_path_calculation = current_time
                     if self.path:
                         self.path.pop(0)  # Remove starting position
-                        self.smooth_path(buildings, units, screen_width, screen_height)  # Pass parameters here
-
+                        self.smooth_path(buildings, units, screen_width, screen_height)
             if self.path:
                 next_pos = self.path[0]
                 dx, dy = next_pos[0] - self.x, next_pos[1] - self.y

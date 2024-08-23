@@ -4,7 +4,7 @@ import heapq
 def heuristic(a, b):
     return abs(b[0] - a[0]) + abs(b[1] - a[1])
 
-def a_star(start, goal, obstacles, unit_radius):
+def a_star(start, goal, buildings, units, unit_radius):
     neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (1,-1), (-1,1), (-1,-1)]
     close_set = set()
     came_from = {}
@@ -14,13 +14,12 @@ def a_star(start, goal, obstacles, unit_radius):
     heapq.heappush(open_set, (fscore[start], start))
     
     def is_valid(pos):
-        for obs in obstacles:
-            if isinstance(obs, pygame.Rect):  # Building
-                if obs.collidepoint(pos):
-                    return False
-            else:  # Unit
-                if ((pos[0] - obs[0])**2 + (pos[1] - obs[1])**2)**0.5 < unit_radius * 2:
-                    return False
+        for building in buildings:
+            if building.rect.colliderect(pygame.Rect(pos[0] - unit_radius, pos[1] - unit_radius, unit_radius * 2, unit_radius * 2)):
+                return False
+        for unit in units:
+            if ((pos[0] - unit[0])**2 + (pos[1] - unit[1])**2)**0.5 < unit_radius * 2:
+                return False
         return True
 
     while open_set:
