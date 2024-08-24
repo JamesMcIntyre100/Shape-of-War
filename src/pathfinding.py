@@ -1,9 +1,14 @@
 import pygame
 import heapq
 
+from profiling import audit
+
+
+@audit
 def heuristic(a, b):
     return abs(b[0] - a[0]) + abs(b[1] - a[1])
 
+@audit
 def a_star(start, goal, buildings, units, unit_radius):
     neighbors = [(0,1), (0,-1), (1,0), (-1,0), (1,1), (1,-1), (-1,1), (-1,-1)]
     close_set = set()
